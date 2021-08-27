@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<%- include('./partials/head') %>
+
+<body class="bg-primary m-0 text-white font-sans">
+    <!-- ChatCord Logo -->
+    <div class="mt-6">
+        <img class="h-6 mx-auto" src="./imgs/chatcord-text-logo-white.png" alt="ChatCord Logo">
+    </div>
+
+    <div class="w-11/12 mx-auto mt-28">
+        <h1 class="font-semibold text-2xl mb-1">Witamy ponownie!</h1>
+        <p class="text-gray-300 text-sm mb-4">Cieszymy się, że znowu z nami jesteś!</p>
+
+        <form method="POST">
+            <label for="login" class="text-gray-400 text-xs mb-1">ADRES E-MAIL LUB NUMER TELEFONU</label>
+            <input if="login" class="bg-secondary border border-gray-900 rounded-sm w-full h-10 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 px-2" type="text" name="login" required><br>
+
+            <label for="password" class="text-gray-400 text-xs mb-1" class="text-gray-300 text-xs mb-2">HASŁO</label>
+            <input id="password" class="bg-secondary border border-gray-900 rounded-sm w-full h-10 mb-1 focus:outline-none focus:ring-2 focus:ring-blue-500 px-2" type="password" name="password" required>
+
+            <p class="text-sm"><a class="link" href="">Nie pamiętasz hasła?</a></p><br>
+
+            <button class="w-full h-10 bg-button rounded-sm mb-2">Zaloguj się</button>
+
+            <p class="text-gray-400 text-sm">Potrzebujesz konta? <a class="link" href>Zarejestruj się</a></p>
+        </form>
+    </div>
+</body>
+</html>

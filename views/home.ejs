@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<%- include('./partials/head') %>
+
+<body class="bg-primary m-0 text-white font-sans">
+
+    <span class="username hidden opacity-0" data-username="<%= user.username %>"></span>
+
+    <section>
+        <%# Channel info %>
+        <div class="flex items-center fixed bg-dark-gray p-4 w-screen">
+            <%# Hamburger %>
+            <button class="mr-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+
+            <%# Channel type %>
+            <div class="mr-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="#babbc0">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+                  </svg>
+            </div>
+
+            <%# Channel name %>
+            <p class="text-xl font-bold">channel_name</p>
+        </div>
+
+
+        <%# Chat content %>
+        <main class="chat-messages flex flex-col justify-end w-screen min-h-screen pb-10">
+
+            <!-- <%# Message container %>
+            <div class="flex row px-1 mb-2">
+
+                <%# User's avatar %>
+                <div class="mr-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd" />
+                      </svg>
+                </div>
+
+                <div>
+                    <%# Message info %>
+                    <div>
+                        <span class="text-red-500 font-bold mr-1">Username</span>
+                        <span class="text-gray-400 text-xs">Wczoraj, 22:26</span>
+                    </div>
+
+                    <%# Message %>
+                    <div>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque in auctor justo, nec pellentesque elit. Ut molestie, nisl sed suscipit pretium, lectus urna cursus lacus, quis ultrices nisi turpis non purus.</p>
+                    </div>
+                </div>
+            </div> -->
+        </main>
+
+        <%# Send message container %>
+        <div class="fixed bottom-0 w-screen py-2">
+            <div class="flex justify-center items-center bg-vdark-gray rounded-full px-4 py-1 w-10/12 mx-auto">
+                <form class="chat--form flex justify-center items-center bg-vdark-gray rounded-full px-4 py-1 w-10/12 mx-auto">
+                    <input id="msg" class="bg-transparent outline-none w-11/12" type="text" placeholder="Napisz na kanał" autocomplete="off" required>
+                    <button>
+                        <svg version="1.1" class="h-5 w-5" id="Icons" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                            viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve" fill="#c1c2c6">
+                        <path d="M29.3,2.6c-0.3-0.2-0.7-0.3-1-0.2L3,11.7c-0.4,0.1-0.7,0.5-0.7,0.9c0,0.4,0.3,0.8,0.7,0.9l10.2,3.8l10-10
+                            c0.4-0.4,1-0.4,1.4,0s0.4,1,0,1.4l-9.8,9.8l6.6,10.6c0.2,0.3,0.5,0.5,0.8,0.5c0.1,0,0.1,0,0.2,0c0.4-0.1,0.7-0.4,0.8-0.7l6.2-25.2
+                            C29.7,3.3,29.6,2.9,29.3,2.6z"/>
+                        </svg>
+                    </button>
+                </form>
+            </div>  
+        </div>
+    </section>
+
+    <script src='/socket.io/socket.io.js'></script>
+    <script src='js/script.js'></script>
+</body>
+</html>

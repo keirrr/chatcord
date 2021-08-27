@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.link{
+    color: #4baeee;
+}
+
+.checkbox{
+    background-color: transparent;
+    border: 1px solid rgba(17, 24, 39);
+    border-radius: 0.125rem;
+}
+
+.chat-messages:last-child{
+    margin-bottom: 250px;
+}
+
+.chat-messages:first-child{
+    margin-bottom: 250px;
+}

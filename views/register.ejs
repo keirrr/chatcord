@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<%- include('./partials/head') %>
+
+<body class="bg-primary m-0 text-white font-sans">
+    <!-- ChatCord Logo -->
+    <div class="mt-6">
+        <img class="h-6 mx-auto" src="./imgs/chatcord-text-logo-white.png" alt="ChatCord Logo">
+    </div>
+
+    <div class="w-11/12 mx-auto mt-28">
+        <h1 class="font-semibold text-2xl mb-6 text-center">Załóż konto</h1>
+
+        <form method="POST">
+            <p class="text-gray-400 text-xs mb-1">ADRES E-MAIL</p>
+            <input class="bg-secondary border border-gray-900 rounded-sm w-full h-10 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 px-2" type="email" name="email"  required><br>
+
+            <p class="text-gray-400 text-xs mb-1">NAZWA UŻYTKOWNIKA</p>
+            <input class="bg-secondary border border-gray-900 rounded-sm w-full h-10 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 px-2" type="text" name="username" minlength="3" maxlength="15" pattern="^[A-Za-z0-9_]{1,15}$" required><br>
+
+            <p class="text-gray-400 text-xs mb-1" class="text-gray-300 text-xs mb-2">HASŁO</p>
+            <input class="bg-secondary border border-gray-900 rounded-sm w-full h-10 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 px-2" type="password" name="password" minlength="6" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" required><br>
+
+            <label for="birthday" class="text-gray-400 text-xs mb-1" for="birthday">DATA URODZENIA</label>
+            <div id="birthday" class="flex">
+                <input class="bg-secondary border border-gray-900 rounded-sm w-full h-10 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 px-2" type="text" name="birthdayDay" list="days" placeholder="Dzień" min="1" max="31" required>
+                <!-- <datalist id="days">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                    <option value="31">31</option>
+                </datalist> -->
+                
+                <input class="bg-secondary border border-gray-900 rounded-sm w-full h-10 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 mx-1" type="text" name="birthdayMonth" list="days" placeholder="Miesiąc" min="1" max="12" required>
+
+                <input class="bg-secondary border border-gray-900 rounded-sm w-full h-10 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 px-2" type="text" name="birthdayYear" list="days" placeholder="Rok" min="1921" max="2018" required>
+            </div>
+            
+
+            <div class="flex items-center mb-4">
+                <input id="statue" type="checkbox" class="mr-2 w-12 h-12 checkbox" required>
+                <label for="statue" class="text-sm text-gray-500">Przeczytałem(-łam) i akceptuję <a class="link" href="">Warunki Korzystania z Usługi</a> oraz <a class="link" href=""><u>Politykę Prywatności</u></a> ChatCorda.</label>
+            </div>
+
+            <button class="w-full h-10 bg-button rounded-sm mb-2">Kontynuuj</button>
+
+            <p class="text-sm"><a class="link" href="">Masz już konto?</a></p><br>
+        </form>
+    </div>
+</body>
+</html>
