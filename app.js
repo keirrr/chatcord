@@ -1,8 +1,8 @@
 const express = require("express");
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 const socket = require('socket.io');
-const server = app.listen(port);
+const server = app.listen(PORT);
 const io = socket(server)
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
