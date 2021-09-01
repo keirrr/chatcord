@@ -51,6 +51,10 @@ app.get('*', checkUser)
 // Auth
 app.use(authRoutes);
 
+app.get('', requireAuth, (req, res) => {
+    res.redirect('home')
+})
+
 //Home
 app.get('/home', requireAuth, (req, res) => {
     res.render('home')
@@ -78,8 +82,8 @@ io.on('connection', (socket) => {
     // io.emit() - to everyone
 
     // Listen for chat message
-    socket.on('chatMessage', (msg) => {
-        io.emit('message', msg)
+    socket.on('chatMessage', (msgDetails) => {
+        io.emit('message', msgDetails)
     })
 })
 

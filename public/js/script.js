@@ -3,9 +3,9 @@ const chatForm = document.querySelector('.chat--form')
 const socket = io();
 
 // Message from server
-socket.on('message', message => {
-    console.log(message)
-    outputMessage(message)
+socket.on('message', (msgDetails) => {
+    console.log(msgDetails)
+    outputMessage(msgDetails.msg, msgDetails.usr)
 })
 
 chatForm.addEventListener('submit', (e) => {
@@ -13,22 +13,33 @@ chatForm.addEventListener('submit', (e) => {
 
     const msg = e.target.elements.msg.value
 
-    // Emit message to server
-    socket.emit('chatMessage', msg)
+    const usr = document.cookie
+    .split('; ')
+    .find(row => row.startsWith('username='))
+    .split('=')[1];
 
+    let msgDetails = {
+        msg,
+        usr
+    }
+
+    // Emit message to server
+    socket.emit('chatMessage', msgDetails)
+  
     // Clear input
     e.target.elements.msg.value = ''
     e.target.elements.msg.focus()
 })
 
 // Output message to DOM
-function outputMessage(message) {
-    let date = new Date()
+function outputMessage(message, username) {
+    let date = new Date();
     let hour = date.getHours()
     let minute = date.getMinutes()
 
-    const usernameSpan = document.querySelector('.username')
-    const username = usernameSpan.dataset.username
+    if (minute < 10) {
+        minute = '0' + minute
+    }
 
     const div = document.createElement('div')
 
@@ -44,7 +55,7 @@ function outputMessage(message) {
 
     <div>
         <div class="flex items-center">
-            <span class="text-red-500 font-bold mr-2">${username} </span>
+            <span class="text-red-500 font-bold mr-2">${username}</span>
             <span class="text-gray-400 text-xs">${hour}:${minute}</span>
         </div>
 
