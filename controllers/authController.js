@@ -6,9 +6,17 @@ const handleErrors = (err) => {
     console.log(err.message, err.code)
     let errors = { email: '', username: '', password: '', birthdayDay: '', birthdayMonth: '', birthdayYear: '' }
 
-    if (err.code = 11000) {
-        errors.email = 'EMAIL - Ten email jest już zajęty'
+    if (err.message = 'Niepoprawne hasło') {
+        errors.password = 'HASŁO - Hasło jest niepoprawne'
     }
+
+    if (err.message = 'Niepoprawny adres email') {
+        errors.email = 'EMAIL - Ten email nie istnieje'
+    }
+
+    //if (err.code = 11000) {
+    //    errors.email = 'EMAIL - Ten email jest już zajęty'
+    //}
 
     if (err.message.includes('User validation failed')) {
         Object.values(err.errors).forEach(({properties}) => {

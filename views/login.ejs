@@ -13,19 +13,74 @@
         <h1 class="font-semibold text-2xl mb-1">Witamy ponownie!</h1>
         <p class="text-gray-300 text-sm mb-4">Cieszymy się, że znowu z nami jesteś!</p>
 
-        <form method="POST">
-            <label for="login" class="text-gray-400 text-xs mb-1">ADRES E-MAIL LUB NUMER TELEFONU</label>
-            <input if="login" class="bg-secondary border border-gray-900 rounded-sm w-full h-10 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 px-2" type="text" name="login" required><br>
+        <form method="POST" class="login--form">
+            <label for="login" class="email--label text-gray-400 text-xs font-bold mb-1">ADRES E-MAIL LUB NUMER TELEFONU</label>
+            <input if="login" class="bg-secondary border border-gray-900 rounded w-full h-10 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 px-2" type="text" name="email" required><br>
 
-            <label for="password" class="text-gray-400 text-xs mb-1" class="text-gray-300 text-xs mb-2">HASŁO</label>
-            <input id="password" class="bg-secondary border border-gray-900 rounded-sm w-full h-10 mb-1 focus:outline-none focus:ring-2 focus:ring-blue-500 px-2" type="password" name="password" required>
+            <label for="password" class="password--label text-gray-400 text-xs font-bold mb-1" class="text-gray-300 text-xs mb-2">HASŁO</label>
+            <input id="password" class="bg-secondary border border-gray-900 rounded w-full h-10 mb-1 focus:outline-none focus:ring-2 focus:ring-blue-500 px-2" type="password" name="password" required>
 
             <p class="text-sm"><a class="link" href="">Nie pamiętasz hasła?</a></p><br>
 
-            <button class="w-full h-10 bg-button rounded-sm mb-2">Zaloguj się</button>
+            <button class="w-full h-10 bg-button rounded mb-2">Zaloguj się</button>
 
             <p class="text-gray-400 text-sm">Potrzebujesz konta? <a class="link" href="/register">Zarejestruj się</a></p>
         </form>
     </div>
+
+    <script>
+        const formElem = document.querySelector('.login--form')
+        const emailLabel = document.querySelector('.email--label')
+        const passwordLabel = document.querySelector('.password--label')
+
+        formElem.addEventListener('submit', async (e) => {
+            e.preventDefault()
+
+            const email = formElem.email.value
+            const password = formElem.password.value
+
+            // Reset label
+            // Email
+            emailLabel.textContent = "ADRES E-MAIL"
+            emailLabel.classList.remove("text-red-500")
+            emailLabel.classList.add("text-gray-400")
+            // Password
+            passwordLabel.textContent = "Hasło"
+            passwordLabel.classList.remove("text-red-500")
+            passwordLabel.classList.add("text-gray-400")
+
+            try {
+                const res = await fetch('/register', {
+                    method: 'POST',
+                    body: JSON.stringify({ 
+                        email,
+                        password
+                    }),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                const data = await res.json()
+                console.log(data)
+                if (data.errors) {
+                    if (data.errors.email != '') {
+                        emailLabel.textContent = data.errors.email
+                        emailLabel.classList.remove("text-gray-400")
+                        emailLabel.classList.add("text-red-500")
+                    }
+                    if (data.errors.password != '') {
+                        passwordLabel.textContent = data.errors.password
+                        passwordLabel.classList.remove("text-gray-400")
+                        passwordLabel.classList.add("text-red-500")
+                    }
+                }
+                if (data.user) {
+                    location.assign('/')
+                }
+            } catch (err) {
+                console.log('error')
+                console.log(err)
+            }
+        })
+    </script>
 </body>
 </html>
