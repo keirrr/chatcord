@@ -29,6 +29,10 @@ option {
     cursor: pointer;
 }
   
-option:hover,  .active{
-background-color: lightblue;
+option:hover, .active{
+    background-color: lightblue;
+}
+
+.chat-messages{
+    direction: rlt;
 }

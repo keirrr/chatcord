@@ -61,18 +61,18 @@
                 
                 <input class="bg-secondary border border-gray-900 rounded w-full h-10 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 mx-1" type="text" name="birthdayMonth" list="months" placeholder="Miesiąc" min="1" max="12" autocomplete="off" required>
                 <datalist id="months">
-                    <option value="styczeń">styczeń</option>
-                    <option value="luty">luty</option>
-                    <option value="marzec">marzec</option>
-                    <option value="kwiecień">kwiecień</option>
-                    <option value="maj">maj</option>
-                    <option value="czerwiec">czerwiec</option>
-                    <option value="lipiec">lipiec</option>
-                    <option value="sierpień">sierpień</option>
-                    <option value="wrzesień">wrzesień</option>
-                    <option value="październik">październik</option>
-                    <option value="listopad">listopad</option>
-                    <option value="grudzień">grudzień</option>
+                    <option value="1">styczeń</option>
+                    <option value="2">luty</option>
+                    <option value="3">marzec</option>
+                    <option value="4">kwiecień</option>
+                    <option value="5">maj</option>
+                    <option value="6">czerwiec</option>
+                    <option value="7">lipiec</option>
+                    <option value="8">sierpień</option>
+                    <option value="9">wrzesień</option>
+                    <option value="10">październik</option>
+                    <option value="11">listopad</option>
+                    <option value="12">grudzień</option>
                 </datalist>
 
                 <input class="bg-secondary border border-gray-900 rounded w-full h-10 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 px-2" type="text" name="birthdayYear" placeholder="Rok" min="1921" max="2018" autocomplete="off" required>
@@ -172,6 +172,9 @@
                         birthdayLabel.classList.remove("text-gray-400")
                         birthdayLabel.classList.add("text-red-500")
                     }
+                }
+                if (data.user) {
+                    location.assign('/');
                 }
             } catch (err) {
                 console.log('error')

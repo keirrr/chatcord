@@ -3,7 +3,7 @@
 
 <%- include('./partials/head') %>
 
-<body class="bg-primary m-0 text-white font-sans">
+<body class="bg-primary m-0 text-white font-sans h-screen">
     <section>
         <%# Channel info %>
         <div class="flex items-center fixed bg-dark-gray p-4 w-screen">
@@ -22,42 +22,20 @@
             </div>
 
             <%# Channel name %>
-            <p class="text-xl font-bold">channel_name</p>
+            <p class="text-xl font-bold">główny</p>
         </div>
 
 
         <%# Chat content %>
-        <main class="chat-messages flex flex-col justify-end w-screen min-h-screen pb-10">
-
-            <!-- <%# Message container %>
-            <div class="flex row px-1 mb-2">
-
-                <%# User's avatar %>
-                <div class="mr-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd" />
-                      </svg>
-                </div>
-
-                <div>
-                    <%# Message info %>
-                    <div>
-                        <span class="text-red-500 font-bold mr-1">Username</span>
-                        <span class="text-gray-400 text-xs">Wczoraj, 22:26</span>
-                    </div>
-
-                    <%# Message %>
-                    <div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque in auctor justo, nec pellentesque elit. Ut molestie, nisl sed suscipit pretium, lectus urna cursus lacus, quis ultrices nisi turpis non purus.</p>
-                    </div>
-                </div>
-            </div> -->
+        <main class="chat-messages w-screen h-screen pb-10 overflow-scroll">
+            <div class="scroller-content flex flex-col justify-end min-h-full">
+            </div>
         </main>
 
         <%# Send message container %>
-        <div class="fixed bottom-0 w-screen py-2">
-            <div class="flex justify-center items-center bg-vdark-gray rounded-full px-4 py-1 w-10/12 mx-auto">
-                <form class="chat--form flex justify-center items-center bg-vdark-gray rounded-full px-4 py-1 w-10/12 mx-auto">
+        <div class="fixed bg-primary bottom-0 w-screen py-2">
+            <div class="flex justify-center items-center bg-vdark-gray rounded-full py-1 w-10/12 mx-auto">
+                <form class="chat--form flex justify-between  bg-vdark-gray rounded-full px-4 py-1 w-full mx-auto">
                     <input id="msg" class="bg-transparent outline-none w-11/12" type="text" placeholder="Napisz na kanał" autocomplete="off" required>
                     <button>
                         <svg version="1.1" class="h-5 w-5" id="Icons" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"

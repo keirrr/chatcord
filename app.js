@@ -47,19 +47,17 @@ app.use(express.static('public'));
 
 //ROUTES
 app.get('*', checkUser)
-
-// Auth
-app.use(authRoutes);
-
-app.get('', requireAuth, (req, res) => {
+app.get('/', requireAuth, (req, res) => {
     res.redirect('home')
 })
 
 //Home
 app.get('/home', requireAuth, (req, res) => {
     res.render('home')
-
 })
+
+// Auth
+app.use(authRoutes);
 
 // Web socket
 io.on('connection', (socket) => {

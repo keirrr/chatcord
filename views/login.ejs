@@ -14,8 +14,8 @@
         <p class="text-gray-300 text-sm mb-4">Cieszymy się, że znowu z nami jesteś!</p>
 
         <form method="POST" class="login--form">
-            <label for="login" class="email--label text-gray-400 text-xs font-bold mb-1">ADRES E-MAIL LUB NUMER TELEFONU</label>
-            <input if="login" class="bg-secondary border border-gray-900 rounded w-full h-10 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 px-2" type="text" name="email" required><br>
+            <label for="login" class="email--label text-gray-400 text-xs font-bold mb-1">ADRES E-MAIL</label>
+            <input id="login" class="bg-secondary border border-gray-900 rounded w-full h-10 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 px-2" type="text" name="email" required><br>
 
             <label for="password" class="password--label text-gray-400 text-xs font-bold mb-1" class="text-gray-300 text-xs mb-2">HASŁO</label>
             <input id="password" class="bg-secondary border border-gray-900 rounded w-full h-10 mb-1 focus:outline-none focus:ring-2 focus:ring-blue-500 px-2" type="password" name="password" required>
@@ -45,22 +45,21 @@
             emailLabel.classList.remove("text-red-500")
             emailLabel.classList.add("text-gray-400")
             // Password
-            passwordLabel.textContent = "Hasło"
+            passwordLabel.textContent = "HASŁO"
             passwordLabel.classList.remove("text-red-500")
             passwordLabel.classList.add("text-gray-400")
 
             try {
-                const res = await fetch('/register', {
+                const res = await fetch('/login', {
                     method: 'POST',
-                    body: JSON.stringify({ 
-                        email,
-                        password
-                    }),
+                    body: JSON.stringify({ email, password }),
                     headers: { 'Content-Type': 'application/json' }
                 });
 
                 const data = await res.json()
+
                 console.log(data)
+
                 if (data.errors) {
                     if (data.errors.email != '') {
                         emailLabel.textContent = data.errors.email
@@ -77,7 +76,6 @@
                     location.assign('/')
                 }
             } catch (err) {
-                console.log('error')
                 console.log(err)
             }
         })

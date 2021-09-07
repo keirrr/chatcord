@@ -8,8 +8,10 @@ const requireAuth = (req, res, next) => {
     if (token) {
         jwt.verify(token, '&8*ws>tA>e(h/;<z6h.=;unK', (err, decodedToken) => {
             if (err) {
+                console.log(err.message);
                 res.redirect('/login')
             } else {
+                console.log(decodedToken);
                 next()
             }
         })
@@ -22,6 +24,8 @@ const requireAuth = (req, res, next) => {
 const checkUser = (req, res, next) => {
     const token = req.cookies.jwt
 
+    var currView = req.originalUrl;
+
     if (token) {
         jwt.verify(token, '&8*ws>tA>e(h/;<z6h.=;unK', async (err, decodedToken) => {
             if (err) {
@@ -30,6 +34,9 @@ const checkUser = (req, res, next) => {
             } else {
                 let user = await User.findById(decodedToken.id)
                 res.locals.user = user
+                if ( currView == '/login' || currView == '/register') {
+                    res.redirect('/home')
+                }
                 next()
             }
         })

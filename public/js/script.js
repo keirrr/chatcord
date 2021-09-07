@@ -1,4 +1,5 @@
 const chatForm = document.querySelector('.chat--form')
+const chatContainer = document.querySelector('.chat-messages')
 
 const socket = io();
 
@@ -60,8 +61,11 @@ function outputMessage(message, username) {
         </div>
 
         <div>
-            <p>${message}</p>
+            <p class="break-words whitespace-normal">${message}</p>
         </div>
     </div>`;
-    document.querySelector('.chat-messages').appendChild(div)
+    document.querySelector('.scroller-content').appendChild(div)
+
+    console.log(chatContainer.scrollTop, chatContainer.scrollHeight)
+    chatContainer.scrollTop = chatContainer.scrollHeight
 }
