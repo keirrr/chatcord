@@ -38,16 +38,42 @@ option:hover, .active{
 }
 
 .main-move-left {
+    opacity: 1;
     transform: translateX(calc(-83.33%));
+    transition: all ease-in-out .2s;
 }
 
-.main-move-left:after {
-    content: '';
+.main-panel-bg-layer {
     position: absolute;
     top: 0;
     left: 0;
-    height: 100%;
-    width: 100%;
+    height: 100vh;
+    width: 100vw;
+    z-index: 50;
+    opacity: 0;
     background-color: rgba(0, 0, 0, 0.3);
     border-radius: 0.5rem;
+    transition: opacity ease-in-out .2s;
+    pointer-events: none;
 }
+
+/* Scrollbar */
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+} 

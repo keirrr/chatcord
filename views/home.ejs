@@ -5,9 +5,10 @@
 
 <body class="relative bg-vdark-gray m-0 text-white font-sans h-screen">
     <%# Main panel %>
-    <section class="main-panel absolute z-50 transition-transform">
+    <section class="flex flex-col main-panel absolute h-full z-50 transition-all duration-200">
+        <div class="main-panel-bg-layer"></div>
         <%# Channel info %>
-        <div class="flex items-center justify-between fixed bg-dark-gray p-4 w-screen rounded-t-lg">
+        <div class="flex items-center justify-between bg-dark-gray p-4 w-screen rounded-t-lg">
             <div class="flex items-center">
                 <%# Hamburger %>
                 <button class="mr-4">
@@ -28,22 +29,24 @@
             </div>
 
             <%# Users list %>
-            <div class="right-0">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="#babbc0">
-                    <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-                </svg>
+            <div class="right-0 flex">
+                <button class="users-list-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="#babbc0">
+                        <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                    </svg>
+                </button>
             </div>
         </div>
 
 
         <%# Chat content %>
-        <main class="chat-messages bg-primary w-screen h-screen pb-10 overflow-scroll rounded-lg">
+        <main class="flex-auto chat-messages bg-primary w-screen overflow-y-auto overflow-x-hidden">
             <div class="scroller-content flex flex-col justify-end min-h-full">
             </div>
         </main>
 
         <%# Send message container %>
-        <div class="fixed bg-primary bottom-0 w-screen py-2 rounded-b-lg">
+        <div class="flex-initial bg-primary bottom-0 w-screen py-2 rounded-b-lg">
             <div class="flex justify-center items-center bg-vdark-gray rounded-full py-1 w-10/12 mx-auto">
                 <form class="chat--form flex justify-between  bg-vdark-gray rounded-full px-4 py-1 w-full mx-auto">
                     <input id="msg" class="bg-transparent outline-none w-11/12" type="text" placeholder="Napisz na kanał" autocomplete="off" required>
@@ -61,14 +64,14 @@
     </section>
 
     <%# Users list panel %>
-    <section class="users-list-panel absolute right-0 flex flex-col w-10/12 h-screen p-2 z-40">
+    <section class="users-list-panel absolute right-0 hidden flex-col w-10/12 h-screen p-2 z-40">
         <%# Channel info %>
         <div class="flex items-center bg-dark-gray p-4 w-full rounded-t-lg">
             <%# Channel type %>
             <div class="mr-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="#babbc0">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
-                  </svg>
+                </svg>
             </div>
 
             <%# Channel name %>
@@ -99,28 +102,6 @@
     <script src='/socket.io/socket.io.js'></script>
     <script src='js/script.js'></script>
     <script src='js/swiped-events.min.js'></script>
-    <script>
-        const mainPanelElem = document.querySelector('.main-panel')
-
-        let isSwipedLeft = false,
-            isSwipedRight = false;
-
-
-        document.addEventListener('swiped', function(e) {
-            // Swipe left
-            if (isSwipedLeft == false && isSwipedRight == false) {
-                document.addEventListener('swiped-left', function(e) {
-                    mainPanelElem.classList.add('main-move-left')
-                    isSwipedLeft = true
-                });
-            }
-            else if (isSwipedLeft == true && isSwipedRight == false) {
-                document.addEventListener('swiped-right', function(e) {
-                    mainPanelElem.classList.remove('main-move-left')
-                    isSwipedLeft = false
-                });
-            }
-        });
-    </script>
+    <script src='js/home.js'></script>
 </body>
 </html>
