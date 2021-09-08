@@ -11,6 +11,10 @@ module.exports = {
       'dark-gray': '#303136',
       'vdark-gray': '#2a2b2f'
      }),
+     borderColor: theme => ({
+      ...theme('colors'),
+      'primary': '#37393e'
+     }),
      fontFamily: {
       'sans': ['"Helvetica"', 'sans-serif']
      },

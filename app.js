@@ -9,12 +9,15 @@ const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
 const { requireAuth, checkUser } = require('./middleware/authMiddleware')
 
-//Routes
+//ROUTES
 const authRoutes = require('./routes/authRoutes');
 
-//Models
+// MODELS
+// User
 const User = require('./models/user');
 const { render } = require('ejs');
+// Message
+const Message = require('./models/user')
 
 // Middleware
 app.use(cookieParser())
@@ -67,12 +70,12 @@ io.on('connection', (socket) => {
     // socket.emit('message', 'Welcome to ChatCord!')
 
     // Broadcast when a user connect
-    socket.broadcast.emit('message', 'User has joined.');
+    //socket.broadcast.emit('message', 'User has joined.');
 
-    io.on('disconnect', () => {
+    //io.on('disconnect', () => {
         // Broadcast when a user disconnect
-        socket.broadcast.emit('message', 'User has left.')
-    })
+        //socket.broadcast.emit('message', 'User has left.')
+    //})
 
     // Types of messages
     // socket.emit() - to single client
@@ -82,6 +85,7 @@ io.on('connection', (socket) => {
     // Listen for chat message
     socket.on('chatMessage', (msgDetails) => {
         io.emit('message', msgDetails)
+        console.log(msgDetails)
     })
 })
 
