@@ -106,6 +106,7 @@
             const birthdayDay = formElem.birthdayDay.value
             const birthdayMonth = formElem.birthdayMonth.value
             const birthdayYear = formElem.birthdayYear.value
+            const isActive = true
 
             // Reset label
             // Email
@@ -134,7 +135,8 @@
                         password,
                         birthdayDay,
                         birthdayMonth,
-                        birthdayYear
+                        birthdayYear,
+                        isActive
                     }),
                     headers: { 'Content-Type': 'application/json' }
                 });

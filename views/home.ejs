@@ -3,7 +3,7 @@
 
 <%- include('./partials/head') %>
 
-<body class="relative bg-vdark-gray m-0 text-white font-sans h-screen">
+<body class="relative bg-vdark-gray m-0 text-white font-sans h-screen overflow-x-hidden">
     <%# Main panel %>
     <section class="flex flex-col main-panel absolute h-full z-50 transition-all duration-200">
         <div class="main-panel-bg-layer"></div>
@@ -11,7 +11,7 @@
         <div class="flex items-center justify-between bg-dark-gray p-4 w-screen rounded-t-lg">
             <div class="flex items-center">
                 <%# Hamburger %>
-                <button class="mr-4">
+                <button class="menu-btn mr-4">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
@@ -64,7 +64,7 @@
     </section>
 
     <%# Users list panel %>
-    <section class="users-list-panel absolute right-0 hidden flex-col w-10/12 h-screen p-2 z-40">
+    <section class="users-list-panel absolute right-0 hidden flex-col w-10/12 h-screen px-2 z-40">
         <%# Channel info %>
         <div class="flex items-center bg-dark-gray p-4 w-full rounded-t-lg">
             <%# Channel type %>
@@ -80,24 +80,40 @@
 
         <div class="users-list-active flex-auto bg-primary h-full p-2 rounded-b-lg">
             <div>
-                <p class="ml-8 text-sm font-bold text-gray-200">DOSTĘPNY - 0</p>
-                <ul>
-                    <li>
-
-                    </li>
+                <p class="ml-8 text-sm font-bold text-gray-200">DOSTĘPNY - <span class="active-users"></span></p>
+                <ul class="active-users-list">
                 </ul>
             </div>
 
-            <div>
+            <!-- <div>
                 <p class="ml-8 text-sm font-bold text-gray-200">NIEDOSTĘPNY - 0</p>
                 <ul>
                     <li>
 
                     </li>
                 </ul>
-            </div>
+            </div> -->
         </div>
     </section>
+
+    <%# Rooms list panel %>
+    <section class="rooms-list-panel absolute left-0 flex-col w-auto h-screen p-3 z-40">
+        <div>
+            <ul>
+                <li><button class="h-12 w-12 bg-button rounded-full mb-2"></button></li>
+                <li><button class="relative h-12 w-12 bg-button rounded-full mb-2 curr-room"></button></li>
+                <li><button class="h-12 w-12 bg-button rounded-full mb-2"></button></li>
+            </ul>
+        </div>
+    </section>
+
+    <%# Rooms list panel %>
+    <nav class="menu absolute h-16 -bottom-16 w-screen bg-vvdark-gray z-50 transition-transform">
+        <ul class="flex justify-around items-center h-full">
+            <li><button>DISCORD</button></li>
+            <li><button>PROFILE</button></li>
+        </ul>
+    </nav>
 
     <script src='/socket.io/socket.io.js'></script>
     <script src='js/script.js'></script>

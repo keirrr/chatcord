@@ -1,17 +1,24 @@
 const jwt = require('jsonwebtoken')
 const User = require('../models/user');
+const app = require('../app')
 
 const requireAuth = (req, res, next) => {
     const token = req.cookies.jwt
 
     // check json web token exists & is verified
     if (token) {
-        jwt.verify(token, '&8*ws>tA>e(h/;<z6h.=;unK', (err, decodedToken) => {
+        jwt.verify(token, '&8*ws>tA>e(h/;<z6h.=;unK', async (err, decodedToken) => {
             if (err) {
                 console.log(err.message);
                 res.redirect('/login')
             } else {
                 console.log(decodedToken);
+                let userId = decodedToken.id
+                await User.findById(userId)
+                    .then(res => {
+                        //console.log(res)
+                        app.activeUsers.push( res.username )
+                    })
                 next()
             }
         })

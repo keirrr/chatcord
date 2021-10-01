@@ -5,8 +5,29 @@ const socket = io();
 
 // Message from server
 socket.on('message', (msgDetails) => {
-    console.log(msgDetails)
+    //console.log(msgDetails)
     outputMessage(msgDetails.msg, msgDetails.usr)
+})
+
+// Amount of connected users
+const activeUsersAmount = document.querySelector('.active-users')
+
+socket.on('activeUsersAmount', (amount) => {
+    activeUsersAmount.textContent = amount
+})
+
+// Active users list
+const activeUsersList = document.querySelector('.active-users-list')
+
+socket.on('activeUsersInfo', (activeUsers) => {
+    // Empty the list
+    activeUsersList.textContent = ''
+
+    activeUsers.forEach(user => {
+        let li = document.createElement('li')
+        li.append(user.username)
+        activeUsersList.appendChild(li)
+    });
 })
 
 chatForm.addEventListener('submit', (e) => {
@@ -66,6 +87,5 @@ function outputMessage(message, username) {
     </div>`;
     document.querySelector('.scroller-content').appendChild(div)
 
-    console.log(chatContainer.scrollTop, chatContainer.scrollHeight)
     chatContainer.scrollTop = chatContainer.scrollHeight
 }

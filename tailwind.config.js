@@ -9,7 +9,8 @@ module.exports = {
       'third': '#232427',
       'button': '#576aea',
       'dark-gray': '#303136',
-      'vdark-gray': '#2a2b2f'
+      'vdark-gray': '#2a2b2f',
+      'vvdark-gray': '#202225'
      }),
      borderColor: theme => ({
       ...theme('colors'),

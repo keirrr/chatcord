@@ -29,7 +29,7 @@ mongoose.set('useCreateIndex', true);
 const dbURL = 'mongodb+srv://chatCordUser:Cqlmdc4OVscPGTSS@chatcord.etthk.mongodb.net/chatcord?retryWrites=true&w=majority';
 mongoose.connect(dbURL, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
-        console.log('connected')
+        console.log('Connected to database')
     })
     .catch((err) => {
         console.log(err);
@@ -62,30 +62,51 @@ app.get('/home', requireAuth, (req, res) => {
 // Auth
 app.use(authRoutes);
 
+let activeUsers = []
+
 // Web socket
 io.on('connection', (socket) => {
-    console.log('New connection')
+    //console.log('New connection')
+    //console.log(socket.client.conn.server.clientsCount + " users connected");
 
-    // Welcome current user
-    // socket.emit('message', 'Welcome to ChatCord!')
+    // Active users Amount
+    let activeUsersAmount = socket.client.conn.server.clientsCount
+    //let username = activeUsers[activeUsersAmount - 1].username
 
-    // Broadcast when a user connect
-    //socket.broadcast.emit('message', 'User has joined.');
+    io.emit('activeUsersAmount', activeUsersAmount)
 
-    //io.on('disconnect', () => {
-        // Broadcast when a user disconnect
-        //socket.broadcast.emit('message', 'User has left.')
-    //})
+    // Active users list info
+    io.emit('activeUsersInfo', activeUsers)
 
-    // Types of messages
-    // socket.emit() - to single client
-    // socket.broadcast.emit() - to everyone except client
-    // io.emit() - to everyone
+    let username = ''
+    setTimeout(() => {
+        username = activeUsers[activeUsersAmount - 1]
+        if (username != '') {
+            console.log('xd')
+            console.log(username)
+        } else {
+            console.log('null')
+        }
+    }, 200)
+
+    socket.on('disconnect', (socket) => {
+        //console.log('Disconnected')
+        // Connected users amount
+        console.log('dc: ' + username)
+        activeUsers = activeUsers.filter(user => user != username)
+        console.log(activeUsers)
+    
+        io.emit('activeUsersAmount', activeUsersAmount)
+        io.emit('activeUsersInfo', activeUsers)
+
+        activeUsersAmount--
+    })
 
     // Listen for chat message
     socket.on('chatMessage', (msgDetails) => {
         io.emit('message', msgDetails)
         console.log(msgDetails)
+
     })
 })
 
@@ -93,4 +114,6 @@ io.on('connection', (socket) => {
 app.use((req, res) => {
     res.status(404).render('404');
 })
+
+exports.activeUsers = activeUsers
   

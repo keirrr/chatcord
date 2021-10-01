@@ -39,6 +39,9 @@ const userSchema = new Schema({
         min: [1920, 'DATA URODZENIA - Wprowadź poprawną datę urodzenia'],
         max: [2008, 'DATA URODZENIA - Wprowadź poprawną datę urodzenia'],
         required: [true, 'DATA URODZENIA - Wprowadź poprawną datę urodzenia']
+    },
+    isActive: { 
+        type: Boolean
     }
     }, {timestamps: true}
 );
