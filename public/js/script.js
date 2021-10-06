@@ -24,10 +24,26 @@ socket.on('activeUsersInfo', (activeUsers) => {
     activeUsersList.textContent = ''
 
     activeUsers.forEach(user => {
+        // Create list item element
         let li = document.createElement('li')
-        li.append(user.username)
+        li.classList.add('flex items-center')
+
+        // Create user's avatar image element
+        let avatar = document.createElement('img')
+        avatar.src = user[1]
+        avatar.classList.add('h-10 rounded-full mr-2')
+
+        // Create user's username text
+        let username = document.createElement('span')
+        username.textContent(user[0])
+
+        li.append(avatar)
+        li.append(username)
+
         activeUsersList.appendChild(li)
     });
+
+    console.log('update user list')
 })
 
 chatForm.addEventListener('submit', (e) => {

@@ -83,10 +83,12 @@ module.exports.register_get = (req, res) => {
 module.exports.register_post = async (req, res) => {
     const { username, password, email, birthdayDay, birthdayMonth, birthdayYear } = req.body;
 
+    const avatarURL = 'uploads/avatars/default.webp'
+
     console.log(req.body)
 
     try{
-        const user = await User.create({ username, password, email, birthdayDay, birthdayMonth, birthdayYear })
+        const user = await User.create({ username, password, email, birthdayDay, birthdayMonth, birthdayYear, avatarURL })
         const token = createToken(user._id);
         res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
         res.cookie('username', user.username, { maxAge: maxAge * 1000 })

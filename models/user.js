@@ -40,8 +40,9 @@ const userSchema = new Schema({
         max: [2008, 'DATA URODZENIA - Wprowadź poprawną datę urodzenia'],
         required: [true, 'DATA URODZENIA - Wprowadź poprawną datę urodzenia']
     },
-    isActive: { 
-        type: Boolean
+    avatarURL: {
+        type: String,
+        required: true
     }
     }, {timestamps: true}
 );

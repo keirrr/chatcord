@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/user');
 const app = require('../app')
 
+let activeUsers = []
+
 const requireAuth = (req, res, next) => {
     const token = req.cookies.jwt
 
@@ -16,8 +18,11 @@ const requireAuth = (req, res, next) => {
                 let userId = decodedToken.id
                 await User.findById(userId)
                     .then(res => {
-                        //console.log(res)
-                        app.activeUsers.push( res.username )
+                        if (!activeUsers.includes(res.username)) {
+                            activeUsers.push( [res.username, res.avatarURL] )
+                            console.log('added users to list')
+                        }
+                        console.log(activeUsers)
                     })
                 next()
             }
@@ -53,4 +58,4 @@ const checkUser = (req, res, next) => {
     }
 }
 
-module.exports = { requireAuth, checkUser }
+module.exports = { requireAuth, checkUser, activeUsers }
