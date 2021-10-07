@@ -18,11 +18,30 @@ const requireAuth = (req, res, next) => {
                 let userId = decodedToken.id
                 await User.findById(userId)
                     .then(res => {
-                        if (!activeUsers.includes(res.username)) {
+                        let isUserExist = false
+                        console.log('== auth ==')
+                        console.log(activeUsers)
+                        activeUsers.forEach(user => {
+                            console.log('username check: ' + user[0] + ' ' + res.username)
+                            if (user[0] == res.username) {
+                                console.log('checked')
+                                isUserExist = true
+                                return true
+                            }
+                        })
+
+                        console.log('isUserExist ' + isUserExist)
+                        if (isUserExist == false) {
                             activeUsers.push( [res.username, res.avatarURL] )
                             console.log('added users to list')
                         }
-                        console.log(activeUsers)
+
+                        // if (activeUsers.includes([res.username, res.avatarURL]) == false) {
+                        //     activeUsers.push( [res.username, res.avatarURL] )
+                        //     console.log('added users to list')
+                        // }
+
+                        console.log('== auth end ==')
                     })
                 next()
             }

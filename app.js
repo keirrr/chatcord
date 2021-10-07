@@ -69,22 +69,26 @@ io.on('connection', (socket) => {
     let activeUsersAmount = socket.client.conn.server.clientsCount
     console.log('active users - ' + activeUsersAmount)
 
+    console.log('Connected!')
     io.emit('activeUsersAmount', activeUsersAmount)
 
     let username = ''
     //
-    // if w userExist się nie wykonuje przez co nie dodaje nowych użytkowników do listy
+    // po odświeżeniu strony zwiększa liczbę użytkownikow
     //
     const userExist = setInterval(() => {
+        console.log('== userExist ==')
         console.log(authMiddleware.activeUsers)
         if (authMiddleware.activeUsers[activeUsersAmount - 1] != undefined) {
             console.log('exist')
-            console.log(authMiddleware.activeUsers[activeUsersAmount - 1])
+            //console.log(authMiddleware.activeUsers[activeUsersAmount - 1])
 
-            username = authMiddleware.activeUsers[activeUsersAmount - 1]
+            let userInfo = authMiddleware.activeUsers[activeUsersAmount - 1]
+            username = userInfo[0]
+            //console.log(username)
 
             // Active users list info
-            console.log('update users list')
+            //console.log('update users list')
             io.emit('activeUsersInfo', authMiddleware.activeUsers)
 
             clearInterval(userExist)
@@ -94,7 +98,7 @@ io.on('connection', (socket) => {
     socket.on('disconnect', (socket) => {
         // Connected users amount
         console.log('dc: ' + username)
-        authMiddleware.activeUsers = authMiddleware.activeUsers.filter(user => user != username)
+        authMiddleware.activeUsers = authMiddleware.activeUsers.filter(user => user[0] != username)
         console.log(authMiddleware.activeUsers)
     
         io.emit('activeUsersAmount', activeUsersAmount)
