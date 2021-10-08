@@ -77,8 +77,8 @@ io.on('connection', (socket) => {
     // po odświeżeniu strony zwiększa liczbę użytkownikow
     //
     const userExist = setInterval(() => {
-        console.log('== userExist ==')
-        console.log(authMiddleware.activeUsers)
+        //console.log('== userExist ==')
+        //console.log(authMiddleware.activeUsers)
         if (authMiddleware.activeUsers[activeUsersAmount - 1] != undefined) {
             console.log('exist')
             //console.log(authMiddleware.activeUsers[activeUsersAmount - 1])
@@ -104,8 +104,6 @@ io.on('connection', (socket) => {
         io.emit('activeUsersAmount', activeUsersAmount)
         console.log('update users list after dc')
         io.emit('activeUsersInfo', authMiddleware.activeUsers)
-
-        activeUsersAmount--
     })
 
     // Listen for chat message
