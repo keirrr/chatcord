@@ -12,6 +12,7 @@ const { requireAuth, checkUser } = require('./middleware/authMiddleware')
 //ROUTES
 const authRoutes = require('./routes/authRoutes');
 const authMiddleware = require('./middleware/authMiddleware')
+let activeUsersList = require('./middleware/authMiddleware').getActiveUsers()
 
 // MODELS
 // User
@@ -66,44 +67,44 @@ app.use(authRoutes);
 // Web socket
 io.on('connection', (socket) => {
     // Active users Amount
-    let activeUsersAmount = socket.client.conn.server.clientsCount
+    console.log(global.activeUsers)
+    let activeUsersAmount = activeUsersList.length
     console.log('active users - ' + activeUsersAmount)
 
     console.log('Connected!')
     io.emit('activeUsersAmount', activeUsersAmount)
 
     let username = ''
-    //
-    // po odświeżeniu strony zwiększa liczbę użytkownikow
-    //
-    const userExist = setInterval(() => {
-        //console.log('== userExist ==')
-        //console.log(authMiddleware.activeUsers)
-        if (authMiddleware.activeUsers[activeUsersAmount - 1] != undefined) {
-            console.log('exist')
-            //console.log(authMiddleware.activeUsers[activeUsersAmount - 1])
 
-            let userInfo = authMiddleware.activeUsers[activeUsersAmount - 1]
+    const userExist = setInterval(() => {
+        console.log(activeUsersList)
+        if (activeUsersList[activeUsersAmount - 1] != undefined) {
+            console.log('exist')
+
+            let userInfo = activeUsersList[activeUsersAmount - 1]
             username = userInfo[0]
-            //console.log(username)
 
             // Active users list info
-            //console.log('update users list')
-            io.emit('activeUsersInfo', authMiddleware.activeUsers)
+            io.emit('activeUsersInfo', activeUsersList)
 
             clearInterval(userExist)
         }
-    }, 100)
+
+        setTimeout(() => {
+            clearInterval(userExist)
+        }, 1000)
+    }, 200)
 
     socket.on('disconnect', (socket) => {
         // Connected users amount
         console.log('dc: ' + username)
-        authMiddleware.activeUsers = authMiddleware.activeUsers.filter(user => user[0] != username)
-        console.log(authMiddleware.activeUsers)
-    
+        let activeUsersAfterDc = global.activeUsers.filter(user => user[0] != username)
+        global.activeUsers = activeUsersAfterDc
+        console.log(global.activeUsers)
+
         io.emit('activeUsersAmount', activeUsersAmount)
         console.log('update users list after dc')
-        io.emit('activeUsersInfo', authMiddleware.activeUsers)
+        io.emit('activeUsersInfo', global.activeUsers)
     })
 
     // Listen for chat message

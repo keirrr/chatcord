@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/user');
 const app = require('../app')
 
-let activeUsers = []
+global.activeUsers = []
 
 const requireAuth = (req, res, next) => {
     const token = req.cookies.jwt
@@ -20,7 +20,6 @@ const requireAuth = (req, res, next) => {
                     .then(res => {
                         let isUserExist = false
                         console.log('== auth ==')
-                        console.log(activeUsers)
                         activeUsers.forEach(user => {
                             console.log('username check: ' + user[0] + ' ' + res.username)
                             if (user[0] == res.username) {
@@ -36,11 +35,7 @@ const requireAuth = (req, res, next) => {
                             console.log('added users to list')
                         }
 
-                        // if (activeUsers.includes([res.username, res.avatarURL]) == false) {
-                        //     activeUsers.push( [res.username, res.avatarURL] )
-                        //     console.log('added users to list')
-                        // }
-
+                        console.log(activeUsers)
                         console.log('== auth end ==')
                     })
                 next()
@@ -77,4 +72,8 @@ const checkUser = (req, res, next) => {
     }
 }
 
-module.exports = { requireAuth, checkUser, activeUsers }
+module.exports = { requireAuth, checkUser,
+    getActiveUsers: () => {
+        return activeUsers
+    }
+}

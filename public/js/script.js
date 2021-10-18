@@ -21,18 +21,19 @@ const activeUsersList = document.querySelector('.active-users-list')
 
 socket.on('activeUsersInfo', (activeUsers) => {
     console.log('updating users list')
+    console.log(activeUsers)
     // Empty the list
     activeUsersList.textContent = ''
 
     activeUsers.forEach(user => {
         // Create list item element
         let li = document.createElement('li')
-        li.classList.add('flex', 'items-center')
+        li.classList.add('flex', 'items-center', 'mb-4')
 
         // Create user's avatar image element
         let avatar = document.createElement('img')
         avatar.src = user[1]
-        avatar.classList.add('h-10', 'rounded-full', 'mr-2')
+        avatar.classList.add('h-8', 'rounded-full', 'mr-4')
 
         // Create user's username text
         let username = document.createElement('span')
