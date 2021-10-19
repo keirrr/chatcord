@@ -6,7 +6,7 @@ const socket = io({transports: ['websocket'], upgrade: false});
 // Message from server
 socket.on('message', (msgDetails) => {
     //console.log(msgDetails)
-    outputMessage(msgDetails.msg, msgDetails.usr)
+    outputMessage(msgDetails.msg, msgDetails.usr, msgDetails.avk)
 })
 
 // Amount of connected users
@@ -20,7 +20,6 @@ socket.on('activeUsersAmount', (amount) => {
 const activeUsersList = document.querySelector('.active-users-list')
 
 socket.on('activeUsersInfo', (activeUsers) => {
-    console.log('updating users list')
     console.log(activeUsers)
     // Empty the list
     activeUsersList.textContent = ''
@@ -44,8 +43,6 @@ socket.on('activeUsersInfo', (activeUsers) => {
 
         activeUsersList.appendChild(li)
     });
-
-    console.log('update user list')
 })
 
 chatForm.addEventListener('submit', (e) => {
@@ -72,7 +69,7 @@ chatForm.addEventListener('submit', (e) => {
 })
 
 // Output message to DOM
-function outputMessage(message, username) {
+function outputMessage(message, username, avatar) {
     let date = new Date();
     let hour = date.getHours()
     let minute = date.getMinutes()
@@ -87,10 +84,8 @@ function outputMessage(message, username) {
     div.classList.add('row')
     div.classList.add('px-1')
     div.classList.add('mb-4')
-    div.innerHTML = `<div class="mr-1">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd" />
-          </svg>
+    div.innerHTML = `<div class="mr-4">
+        <img src="${avatar}" class="h-12 w-12 rounded-full">
     </div>
 
     <div>

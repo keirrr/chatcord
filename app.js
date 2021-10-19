@@ -12,7 +12,6 @@ const { requireAuth, checkUser } = require('./middleware/authMiddleware')
 //ROUTES
 const authRoutes = require('./routes/authRoutes');
 const authMiddleware = require('./middleware/authMiddleware')
-let activeUsersList = require('./middleware/authMiddleware').getActiveUsers()
 
 // MODELS
 // User
@@ -68,24 +67,26 @@ app.use(authRoutes);
 io.on('connection', (socket) => {
     // Active users Amount
     console.log(global.activeUsers)
-    let activeUsersAmount = activeUsersList.length
+    let activeUsersAmount = global.activeUsers.length
     console.log('active users - ' + activeUsersAmount)
 
     console.log('Connected!')
     io.emit('activeUsersAmount', activeUsersAmount)
 
     let username = ''
+    let usernameAvatarUrl = ''
 
     const userExist = setInterval(() => {
-        console.log(activeUsersList)
-        if (activeUsersList[activeUsersAmount - 1] != undefined) {
+        console.log(global.activeUsers)
+        if (global.activeUsers[activeUsersAmount - 1] != undefined) {
             console.log('exist')
 
-            let userInfo = activeUsersList[activeUsersAmount - 1]
+            let userInfo = global.activeUsers[activeUsersAmount - 1]
             username = userInfo[0]
+            usernameAvatarUrl = userInfo[1]
 
             // Active users list info
-            io.emit('activeUsersInfo', activeUsersList)
+            io.emit('activeUsersInfo', global.activeUsers)
 
             clearInterval(userExist)
         }
@@ -109,8 +110,18 @@ io.on('connection', (socket) => {
 
     // Listen for chat message
     socket.on('chatMessage', (msgDetails) => {
-        io.emit('message', msgDetails)
-        console.log(msgDetails)
+        const msg = msgDetails.msg;
+        const usr = msgDetails.usr;
+        const avk = usernameAvatarUrl;
+
+        let msgDetails2 = {
+            msg,
+            usr,
+            avk
+        }
+
+        io.emit('message', msgDetails2)
+        console.log(msgDetails2)
     })
 })
 
