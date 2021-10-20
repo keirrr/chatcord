@@ -3,6 +3,7 @@ const chatContainer = document.querySelector('.chat-messages')
 
 const socket = io({transports: ['websocket'], upgrade: false});
 
+let prevMessageAuthor = ''
 // Message from server
 socket.on('message', (msgDetails) => {
     //console.log(msgDetails)
@@ -78,27 +79,42 @@ function outputMessage(message, username, avatar) {
         minute = '0' + minute
     }
 
-    const div = document.createElement('div')
 
-    div.classList.add('flex')
-    div.classList.add('row')
-    div.classList.add('px-1')
-    div.classList.add('mb-4')
-    div.innerHTML = `<div class="mr-4">
-        <img src="${avatar}" class="h-12 w-12 rounded-full">
-    </div>
+    if (prevMessageAuthor == username) {
 
-    <div>
-        <div class="flex items-center">
-            <span class="text-red-500 font-bold mr-2">${username}</span>
-            <span class="text-gray-400 text-xs">${hour}:${minute}</span>
+        const p = document.createElement('p')
+
+        p.classList.add('break-words')
+        p.classList.add('whitespace-normal')
+        p.innerHTML = `${message}`;
+
+        prevMessage = document.querySelector('.scroller-content > .flex:last-child > .message-info > .message-text')
+        prevMessage.appendChild(p)
+    } else {
+        const div = document.createElement('div')
+
+        div.classList.add('flex')
+        div.classList.add('row')
+        div.classList.add('px-1')
+        div.classList.add('mb-4')
+        div.innerHTML = `<div class="mr-4">
+            <img src="${avatar}" class="h-12 w-12 rounded-full">
         </div>
 
-        <div>
-            <p class="break-words whitespace-normal">${message}</p>
-        </div>
-    </div>`;
-    document.querySelector('.scroller-content').appendChild(div)
+        <div class="message-info">
+            <div class="flex items-center">
+                <span class="author text-red-500 font-bold mr-2">${username}</span>
+                <span class="text-gray-400 text-xs">${hour}:${minute}</span>
+            </div>
+
+            <div class="message-text">
+                <p class="break-words whitespace-normal">${message}</p>
+            </div>
+        </div>`;
+        document.querySelector('.scroller-content').appendChild(div)
+    }
 
     chatContainer.scrollTop = chatContainer.scrollHeight
+
+    prevMessageAuthor = username;
 }
