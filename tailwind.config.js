@@ -10,7 +10,7 @@ module.exports = {
       'button': '#576aea',
       'dark-gray': '#303136',
       'vdark-gray': '#2a2b2f',
-      'vvdark-gray': '#202225'
+      'vvdark-gray': '#202225',
      }),
      borderColor: theme => ({
       ...theme('colors'),
@@ -23,5 +23,7 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar'),
+  ],
 }

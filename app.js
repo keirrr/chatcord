@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
 const { requireAuth, checkUser } = require('./middleware/authMiddleware')
+const emoji = require('node-emoji')
 
 //ROUTES
 const authRoutes = require('./routes/authRoutes');
@@ -110,7 +111,11 @@ io.on('connection', (socket) => {
 
     // Listen for chat message
     socket.on('chatMessage', (msgDetails) => {
-        const msg = msgDetails.msg;
+        var format = function (code, name) {
+            return '<span class="emoji text-xl">' + code + '</span>';
+        };
+        const msg = emoji.emojify(emoji.unemojify(msgDetails.msg), null, format);
+        
         const usr = msgDetails.usr;
         const avk = usernameAvatarUrl;
 
