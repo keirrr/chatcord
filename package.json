@@ -33,5 +33,8 @@
     "tailwind-scrollbar": "^1.3.1",
     "tailwindcss": "^2.2.7",
     "validator": "^13.6.0"
+  },
+  "nodemonConfig": {
+    "ignore": ["fs/*"]
   }
 }

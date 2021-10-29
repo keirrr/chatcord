@@ -7,7 +7,30 @@ let prevMessageAuthor = ''
 // Message from server
 socket.on('message', (msgDetails) => {
     //console.log(msgDetails)
-    outputMessage(msgDetails.msg, msgDetails.usr, msgDetails.avk)
+    outputMessage(msgDetails.msg, msgDetails.msgId, msgDetails.usr, msgDetails.avk)
+})
+
+// Update messages history
+socket.on('updateMessages', (messages) => {
+    console.log(messages)
+    let prevMessageAuthor = '';
+    messages.messages.forEach((elem) => {
+        let message = elem.msg,
+            messageId = elem.msgId,
+            username = elem.usr,
+            avatar = elem.avk,
+            hour = new Date(elem.timestamp),
+            minute = new Date(elem.timestamp)
+        hour = new Date(hour.getTime() + ( hour.getTimezoneOffset() * 60000 )).getHours()
+        minute = new Date(minute.getTime() + ( minute.getTimezoneOffset() * 60000 )).getMinutes()
+
+        if (prevMessageAuthor != username) {
+            printUserFirstMessage(message, messageId, username, avatar, hour, minute)
+            prevMessageAuthor = username;
+        } else {
+            printUserNextMessage(message, messageId)
+        }
+    })
 })
 
 // Amount of connected users
@@ -70,7 +93,7 @@ chatForm.addEventListener('submit', (e) => {
 })
 
 // Output message to DOM
-function outputMessage(message, username, avatar) {
+function outputMessage(message, messageId, username, avatar) {
     let date = new Date();
     let hour = date.getHours()
     let minute = date.getMinutes()
@@ -81,40 +104,47 @@ function outputMessage(message, username, avatar) {
 
 
     if (prevMessageAuthor == username) {
-
-        const p = document.createElement('p')
-
-        p.classList.add('break-words')
-        p.classList.add('whitespace-normal')
-        p.innerHTML = `${message}`;
-
-        prevMessage = document.querySelector('.scroller-content > .flex:last-child > .message-info > .message-text')
-        prevMessage.appendChild(p)
+        printUserNextMessage(message, messageId)
     } else {
-        const div = document.createElement('div')
-
-        div.classList.add('flex')
-        div.classList.add('row')
-        div.classList.add('px-1')
-        div.classList.add('mb-4')
-        div.innerHTML = `<div class="mr-4">
-            <img src="${avatar}" class="h-12 w-12 rounded-full">
-        </div>
-
-        <div class="message-info">
-            <div class="flex items-center">
-                <span class="author text-red-500 font-bold mr-2">${username}</span>
-                <span class="text-gray-400 text-xs">${hour}:${minute}</span>
-            </div>
-
-            <div class="message-text">
-                <p class="break-words whitespace-normal">${message}</p>
-            </div>
-        </div>`;
-        document.querySelector('.scroller-content').appendChild(div)
+        printUserFirstMessage(message, messageId, username, avatar, hour, minute)
     }
 
     chatContainer.scrollTop = chatContainer.scrollHeight
 
     prevMessageAuthor = username;
+}
+
+const printUserFirstMessage = (message, messageId, username, avatar, hour, minute) => {
+    const div = document.createElement('div')
+
+    div.dataset.id = messageId
+
+    div.classList.add('flex', 'row', 'p-1', 'mb-4', 'hover:bg-dark-gray')
+    div.innerHTML = `<div class="mr-4">
+        <img src="${avatar}" class="h-12 w-12 rounded-full">
+    </div>
+
+    <div class="message-info">
+        <div class="flex items-center">
+            <span class="author text-red-500 font-bold mr-2">${username}</span>
+            <span class="text-gray-400 text-xs">${hour}:${minute}</span>
+        </div>
+
+        <div class="message-text">
+            <p class="break-words whitespace-normal">${message}</p>
+        </div>
+    </div>`;
+    document.querySelector('.scroller-content').appendChild(div)
+}
+
+const printUserNextMessage = (message, messageId) => {
+        const p = document.createElement('p')
+
+        p.dataset.id = messageId
+
+        p.classList.add('break-words', 'whitespace-normal')
+        p.innerHTML = `${message}`;
+
+        prevMessage = document.querySelector('.scroller-content > .flex:last-child > .message-info > .message-text')
+        prevMessage.appendChild(p)
 }

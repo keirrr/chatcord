@@ -9,6 +9,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
 const { requireAuth, checkUser } = require('./middleware/authMiddleware')
 const emoji = require('node-emoji')
+const fs = require('fs');
 
 //ROUTES
 const authRoutes = require('./routes/authRoutes');
@@ -66,6 +67,9 @@ app.use(authRoutes);
 
 // Web socket
 io.on('connection', (socket) => {
+    // Socket id
+    console.log(socket.id)
+
     // Active users Amount
     console.log(global.activeUsers)
     let activeUsersAmount = global.activeUsers.length
@@ -88,6 +92,12 @@ io.on('connection', (socket) => {
 
             // Active users list info
             io.emit('activeUsersInfo', global.activeUsers)
+
+            // Get messages history
+            let messagesFile = fs.readFileSync("./fs/chat-messages/public/main/channels/glowny.json")
+            let messages = JSON.parse(messagesFile);
+
+            io.to(socket.id).emit('updateMessages', messages);
 
             clearInterval(userExist)
         }
@@ -115,18 +125,44 @@ io.on('connection', (socket) => {
             return '<span class="emoji text-xl">' + code + '</span>';
         };
         const msg = emoji.emojify(emoji.unemojify(msgDetails.msg), null, format);
-        
+
         const usr = msgDetails.usr;
         const avk = usernameAvatarUrl;
 
+        const timestamp = new Date(new Date().toString().split('GMT')[0]+' UTC').toISOString().split('.')[0]
+
+        // Get messages JSON file
+        let messagesFile = fs.readFileSync("./fs/chat-messages/public/main/channels/glowny.json")
+        let messages = JSON.parse(messagesFile);
+        
+        let msgId = 1
+        if (messages.messages.length > 0)
+            msgId = messages.messages[messages.messages.length - 1].msgId + 1
+
         let msgDetails2 = {
             msg,
+            msgId,
             usr,
-            avk
+            avk,
+            timestamp
         }
 
         io.emit('message', msgDetails2)
-        console.log(msgDetails2)
+
+        // Push new message to JSON
+        messages.messages.push(msgDetails2)
+        let newMessage = JSON.stringify(messages);
+        async function saveFile() {
+            await fs.writeFile("./fs/chat-messages/public/main/channels/glowny.json", newMessage, (err) => {
+                if (err) throw err;
+                console.log("Added new message");
+            })
+        }
+
+        saveFile();
+
+        //console.log(messages)
+        //console.log(msgDetails2)
     })
 })
 
