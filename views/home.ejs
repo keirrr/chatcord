@@ -40,8 +40,8 @@
 
 
         <%# Chat content %>
-        <main class="flex-auto chat-messages bg-primary w-screen overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent">
-            <div class="scroller-content flex flex-col justify-end min-h-full">
+        <main class="flex-auto chat-messages bg-primary h-full w-screen overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent">
+            <div class="scroller-content overflow-y-auto flex flex-col justify-end">
             </div>
         </main>
 
@@ -108,10 +108,10 @@
     </section>
 
     <%# Rooms list panel %>
-    <nav class="menu absolute h-16 -bottom-16 w-screen bg-vvdark-gray z-50 transition-transform">
+    <nav class="menu absolute h-14 -bottom-16 w-screen bg-vvdark-gray z-50 transition-transform">
         <ul class="flex justify-around items-center h-full">
-            <li><button>DISCORD</button></li>
-            <li><button>PROFILE</button></li>
+            <li><button><img class="h-6" src="/imgs/chatcord-logo-white.png"></button></li>
+            <li><button><img class="user-avatar h-8 rounded-full" src=""></button></li>
         </ul>
     </nav>
 

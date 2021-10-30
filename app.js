@@ -93,6 +93,9 @@ io.on('connection', (socket) => {
             // Active users list info
             io.emit('activeUsersInfo', global.activeUsers)
 
+            // Update user avatar
+            io.to(socket.id).emit('updateUserAvatar', usernameAvatarUrl)
+
             // Get messages history
             let messagesFile = fs.readFileSync("./fs/chat-messages/public/main/channels/glowny.json")
             let messages = JSON.parse(messagesFile);

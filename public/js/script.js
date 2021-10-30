@@ -3,6 +3,12 @@ const chatContainer = document.querySelector('.chat-messages')
 
 const socket = io({transports: ['websocket'], upgrade: false});
 
+// Update user avatar
+socket.on('updateUserAvatar', (userAvatarUrl) => {
+    const userAvatarElem = document.querySelector('.user-avatar')
+    userAvatarElem.src = userAvatarUrl
+})
+
 let prevMessageAuthor = ''
 // Message from server
 socket.on('message', (msgDetails) => {
