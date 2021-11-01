@@ -71,24 +71,29 @@ io.on('connection', (socket) => {
     console.log(socket.id)
 
     // Active users Amount
-    console.log(global.activeUsers)
+    //console.log(global.activeUsers)
     let activeUsersAmount = global.activeUsers.length
-    console.log('active users - ' + activeUsersAmount)
+    //console.log('active users - ' + activeUsersAmount)
 
-    console.log('Connected!')
+    //console.log('Connected!')
     io.emit('activeUsersAmount', activeUsersAmount)
 
     let username = ''
     let usernameAvatarUrl = ''
 
     const userExist = setInterval(() => {
-        console.log(global.activeUsers)
+        //console.log(global.activeUsers)
         if (global.activeUsers[activeUsersAmount - 1] != undefined) {
             console.log('exist')
 
             let userInfo = global.activeUsers[activeUsersAmount - 1]
             username = userInfo[0]
             usernameAvatarUrl = userInfo[1]
+            if (userInfo.length == 2)
+                userInfo.push(socket.id)
+            else
+                userInfo[2] = socket.id
+
 
             // Active users list info
             io.emit('activeUsersInfo', global.activeUsers)
@@ -109,18 +114,6 @@ io.on('connection', (socket) => {
             clearInterval(userExist)
         }, 1000)
     }, 200)
-
-    socket.on('disconnect', (socket) => {
-        // Connected users amount
-        console.log('dc: ' + username)
-        let activeUsersAfterDc = global.activeUsers.filter(user => user[0] != username)
-        global.activeUsers = activeUsersAfterDc
-        console.log(global.activeUsers)
-
-        io.emit('activeUsersAmount', activeUsersAmount)
-        console.log('update users list after dc')
-        io.emit('activeUsersInfo', global.activeUsers)
-    })
 
     // Listen for chat message
     socket.on('chatMessage', (msgDetails) => {
@@ -158,7 +151,7 @@ io.on('connection', (socket) => {
         async function saveFile() {
             await fs.writeFile("./fs/chat-messages/public/main/channels/glowny.json", newMessage, (err) => {
                 if (err) throw err;
-                console.log("Added new message");
+                //console.log("Added new message");
             })
         }
 
@@ -166,6 +159,26 @@ io.on('connection', (socket) => {
 
         //console.log(messages)
         //console.log(msgDetails2)
+    })
+
+    // Private message
+    socket.on('privateMessage', (msgDetails) => {
+        let userId = (global.activeUsers.find(user => user[0] == "john2"))[2]
+        
+        io.to(userId).emit('privateMessage', msgDetails)
+    })
+
+    // Disconnect
+    socket.on('disconnect', (socket) => {
+        // Connected users amount
+        //console.log('dc: ' + username)
+        let activeUsersAfterDc = global.activeUsers.filter(user => user[0] != username)
+        global.activeUsers = activeUsersAfterDc
+        //console.log(global.activeUsers)
+
+        io.emit('activeUsersAmount', activeUsersAmount)
+        //console.log('update users list after dc')
+        io.emit('activeUsersInfo', global.activeUsers)
     })
 })
 

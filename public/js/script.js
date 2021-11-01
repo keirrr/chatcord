@@ -3,6 +3,9 @@ const chatContainer = document.querySelector('.chat-messages')
 
 const socket = io({transports: ['websocket'], upgrade: false});
 
+// Disable context menu
+document.addEventListener('contextmenu', event => event.preventDefault());
+
 // Update user avatar
 socket.on('updateUserAvatar', (userAvatarUrl) => {
     const userAvatarElem = document.querySelector('.user-avatar')
@@ -14,6 +17,12 @@ let prevMessageAuthor = ''
 socket.on('message', (msgDetails) => {
     //console.log(msgDetails)
     outputMessage(msgDetails.msg, msgDetails.msgId, msgDetails.usr, msgDetails.avk)
+})
+
+// Private message
+socket.on('privateMessage', (msgDetails) => {
+    console.log("PRIV")
+    console.log(msgDetails)
 })
 
 // Update messages history
@@ -73,6 +82,30 @@ socket.on('activeUsersInfo', (activeUsers) => {
 
         activeUsersList.appendChild(li)
     });
+
+    // Context menu for users list
+    const userInfoElem = document.querySelectorAll('.active-users-list > .flex')
+    userInfoElem.forEach(elem => {
+        elem.addEventListener('contextmenu', (e) => {
+            if (document.querySelector('.users-list-context-menu')){
+                const usersListContextMenu = document.querySelector('.users-list-context-menu')
+                usersListContextMenu.parentNode.removeChild(usersListContextMenu)
+            }
+
+            let pointerX = e.clientX;
+            let pointerY = e.clientY;
+
+            const nav = document.createElement('nav')
+            nav.classList.add('users-list-context-menu', 'absolute', 'z-50', 'h-auto', 'w-auto', 'bg-gray-700', 'rounded-sm')
+            nav.innerHTML = `<button class="p-2 m-2 hover:bg-gray-600">Wyślij wiadomość</button>`
+            document.querySelector('body').appendChild(nav)
+            
+            const usersListContextMenu = document.querySelector('.users-list-context-menu')
+            menuWidth = usersListContextMenu.offsetWidth
+            usersListContextMenu.style.top = pointerY + 'px'
+            usersListContextMenu.style.left = pointerX - menuWidth + 'px'
+        })
+    })
 })
 
 chatForm.addEventListener('submit', (e) => {
@@ -92,6 +125,7 @@ chatForm.addEventListener('submit', (e) => {
 
     // Emit message to server
     socket.emit('chatMessage', msgDetails)
+    socket.emit('privateMessage', msgDetails)
   
     // Clear input
     e.target.elements.msg.value = ''
