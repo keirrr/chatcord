@@ -82,7 +82,7 @@ io.on('connection', (socket) => {
     let usernameAvatarUrl = ''
 
     const userExist = setInterval(() => {
-        //console.log(global.activeUsers)
+        console.log(global.activeUsers)
         if (global.activeUsers[activeUsersAmount - 1] != undefined) {
             console.log('exist')
 
@@ -162,11 +162,11 @@ io.on('connection', (socket) => {
     })
 
     // Private message
-    socket.on('privateMessage', (msgDetails) => {
-        let userId = (global.activeUsers.find(user => user[0] == "john2"))[2]
+    // socket.on('privateMessage', (msgDetails) => {
+    //     let userId = (global.activeUsers.find(user => user[0] == "john2"))[2]
         
-        io.to(userId).emit('privateMessage', msgDetails)
-    })
+    //     io.to(userId).emit('privateMessage', msgDetails)
+    // })
 
     // Disconnect
     socket.on('disconnect', (socket) => {

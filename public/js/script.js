@@ -1,10 +1,16 @@
 const chatForm = document.querySelector('.chat--form')
 const chatContainer = document.querySelector('.chat-messages')
+const chatScrollerContent = document.querySelector('.scroller-content')
 
 const socket = io({transports: ['websocket'], upgrade: false});
 
 // Disable context menu
 document.addEventListener('contextmenu', event => event.preventDefault());
+
+// Slide down chat on load
+window.addEventListener('load', () => {
+    chatContainer.scrollTop = chatContainer.scrollHeight
+})
 
 // Update user avatar
 socket.on('updateUserAvatar', (userAvatarUrl) => {
@@ -25,11 +31,53 @@ socket.on('privateMessage', (msgDetails) => {
     console.log(msgDetails)
 })
 
+
 // Update messages history
-socket.on('updateMessages', (messages) => {
-    console.log(messages)
+// Loader
+const messagesLoader = () => {
+    let msgLoaderDiv = document.createElement('div');
+    msgLoaderDiv.classList.add('msgLoader', 'h-auto', 'w-auto', 'flex', 'flex-col' , 'p-1', 'mb-4')
+    msgLoaderDiv.animate([
+        { opacity: '1' },
+        { opacity: '.5' },
+        { opacity: '1' }
+      ], {
+        duration: 1000,
+        iterations: Infinity
+      })
+
+    function msgLoaderr () {
+        return `
+        <div class="flex mt-4">
+            <div class="mr-4 h-12 w-12 rounded-full bg-vlight-gray"></div>
+        
+            <div>
+                <div class="flex items-center py-2">
+                    <div class="h-5 w-24 mr-2 bg-vlight-gray rounded-full"></div>
+                    <span class="h-5 w-12 bg-vlight-gray rounded-full"></span>
+                </div>
+        
+                <div>
+                    <div class="h-4 w-20 mb-2 bg-vlight-gray rounded-full"></div>
+                    <div class="h-4 w-10 mb-2 bg-vlight-gray rounded-full"></div>
+                    <div class="h-4 w-32 bg-vlight-gray rounded-full"></div>
+                </div>
+            </div>
+        </div>
+        `;
+    }
+
+    msgLoaderDiv.innerHTML = msgLoaderr()
+    msgLoaderDiv.innerHTML += msgLoaderr()
+    msgLoaderDiv.innerHTML += msgLoaderr()
+
+    chatScrollerContent.appendChild(msgLoaderDiv)
+}
+messagesLoader()
+
+socket.on('updateMessages', async (messages) => {
     let prevMessageAuthor = '';
-    messages.messages.forEach((elem) => {
+    await messages.messages.forEach((elem) => {
         let message = elem.msg,
             messageId = elem.msgId,
             username = elem.usr,
@@ -46,6 +94,18 @@ socket.on('updateMessages', (messages) => {
             printUserNextMessage(message, messageId)
         }
     })
+    chatContainer.scrollTop = chatContainer.scrollHeight
+
+    chatScrollerContent.animate([
+        { opacity: '0' },
+        { opacity: '1' }
+      ], {
+        duration: 500,
+        iterations: 1
+      });
+
+    const msgLoaderElem = document.querySelector('.msgLoader')
+    msgLoaderElem.remove()
 })
 
 // Amount of connected users
@@ -85,26 +145,50 @@ socket.on('activeUsersInfo', (activeUsers) => {
 
     // Context menu for users list
     const userInfoElem = document.querySelectorAll('.active-users-list > .flex')
-    userInfoElem.forEach(elem => {
-        elem.addEventListener('contextmenu', (e) => {
-            if (document.querySelector('.users-list-context-menu')){
-                const usersListContextMenu = document.querySelector('.users-list-context-menu')
-                usersListContextMenu.parentNode.removeChild(usersListContextMenu)
-            }
-
-            let pointerX = e.clientX;
-            let pointerY = e.clientY;
-
-            const nav = document.createElement('nav')
-            nav.classList.add('users-list-context-menu', 'absolute', 'z-50', 'h-auto', 'w-auto', 'bg-gray-700', 'rounded-sm')
-            nav.innerHTML = `<button class="p-2 m-2 hover:bg-gray-600">Wyślij wiadomość</button>`
-            document.querySelector('body').appendChild(nav)
-            
+    const showUsersListContextMenu = (e) => {
+        if (document.querySelector('.users-list-context-menu')){
             const usersListContextMenu = document.querySelector('.users-list-context-menu')
-            menuWidth = usersListContextMenu.offsetWidth
+            usersListContextMenu.parentNode.removeChild(usersListContextMenu)
+        }
+
+        let pointerX = e.clientX;
+        let pointerY = e.clientY;
+
+        const nav = document.createElement('nav')
+        nav.classList.add('users-list-context-menu', 'absolute', 'z-50', 'h-auto', 'w-auto', 'bg-gray-700', 'rounded-sm')
+        nav.innerHTML = `<button class="send-msg p-2 m-2 hover:bg-gray-600">Wyślij wiadomość</button>`
+        document.querySelector('body').appendChild(nav)
+        
+        const usersListContextMenu = document.querySelector('.users-list-context-menu')
+        menuWidth = usersListContextMenu.offsetWidth
+        menuHeight = usersListContextMenu.offsetHeight
+        
+        if (pointerY + window.innerHeight < menuHeight)
+            usersListContextMenu.style.top = pointerY - menuHeight + 'px'
+        else
             usersListContextMenu.style.top = pointerY + 'px'
+
+        if (pointerX < menuWidth)
+            usersListContextMenu.style.left = pointerX + 'px'
+        else
             usersListContextMenu.style.left = pointerX - menuWidth + 'px'
+    }
+
+    userInfoElem.forEach(elem => {
+        elem.addEventListener('click', (e) => {
+            showUsersListContextMenu(e)
         })
+        
+        elem.addEventListener('contextmenu', (e) => {
+            showUsersListContextMenu(e)
+        })
+    })
+
+    window.addEventListener('click', (e) => {
+        if (document.querySelector('.users-list-context-menu')){
+            const usersListContextMenu = document.querySelector('.users-list-context-menu')
+            usersListContextMenu.remove()
+        }
     })
 })
 
@@ -158,7 +242,6 @@ const printUserFirstMessage = (message, messageId, username, avatar, hour, minut
     const div = document.createElement('div')
 
     div.dataset.id = messageId
-
     div.classList.add('flex', 'row', 'p-1', 'mb-4', 'hover:bg-dark-gray')
     div.innerHTML = `<div class="mr-4">
         <img src="${avatar}" class="h-12 w-12 rounded-full">
@@ -174,7 +257,7 @@ const printUserFirstMessage = (message, messageId, username, avatar, hour, minut
             <p class="break-words whitespace-normal">${message}</p>
         </div>
     </div>`;
-    document.querySelector('.scroller-content').appendChild(div)
+    chatScrollerContent.appendChild(div)
 }
 
 const printUserNextMessage = (message, messageId) => {

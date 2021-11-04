@@ -41,7 +41,7 @@
 
         <%# Chat content %>
         <main class="flex-auto chat-messages bg-primary h-full w-screen overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent">
-            <div class="scroller-content overflow-y-auto flex flex-col justify-end">
+            <div class="scroller-content min-h-full overflow-y-auto flex flex-col justify-end">
             </div>
         </main>
 
@@ -98,6 +98,15 @@
 
     <%# Rooms list panel %>
     <section class="rooms-list-panel absolute left-0 flex-col w-auto h-screen p-3 z-40">
+        <%# Private rooms %>
+        <div>
+            <ul>
+                <li><button class="h-12 w-12 bg-button rounded-full mb-2"></button></li>
+            </ul>
+            <div class="w-3/4 h-0.5 bg-light-dark-gray mb-2 rounded-full mx-auto"></div>
+        </div>
+
+        <%# Public rooms %>
         <div>
             <ul>
                 <li><button class="h-12 w-12 bg-button rounded-full mb-2"></button></li>
