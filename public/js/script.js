@@ -1,3 +1,139 @@
+//
+// HOME //
+//
+const chatMessagesElem = document.querySelector('.chat-messages')
+
+const mainPanelElem = document.querySelector('.main-panel')
+const mainPanelBgLayer = document.querySelector('.main-panel-bg-layer')
+const menuBtn = document.querySelector('.menu-btn')
+
+const usersListElem = document.querySelector('.users-list-panel')
+const usersListBtn = document.querySelector('.users-list-btn')
+
+const menuElem = document.querySelector('.menu')
+
+let isSwipedLeft = false,
+    isSwipedRight = false,
+    isMainSwiped = false;
+
+//console.log('Left: ' + isSwipedLeft + ' || Right: ' + isSwipedRight + ' || Main: ' + isMainSwiped)
+
+const swipeLeftCenter = () => {
+    if ( isMainSwiped == false ) {
+        //console.log('swipe left from center')
+        mainPanelElem.classList.add('main-move-left')
+        mainPanelBgLayer.style.opacity = '1'
+        usersListElem.style.display = 'flex'
+        setTimeout(() => {
+            isSwipedLeft = true
+            isMainSwiped = true
+            //console.log('Left: ' + isSwipedLeft + ' || Right: ' + isSwipedRight + ' || Main: ' + isMainSwiped)
+        }, 200)
+    }
+}
+
+const swipeRightCenter = () => {
+    if ( isMainSwiped == false ) {
+        //console.log('swipe right from center')
+        mainPanelElem.classList.add('main-move-right')
+        mainPanelBgLayer.style.opacity = '1'
+        menuElem.style.transform = 'translateY(-64px)'
+        setTimeout(() => {
+            isSwipedRight = true
+            isMainSwiped = true
+            //console.log('Left: ' + isSwipedLeft + ' || Right: ' + isSwipedRight + ' || Main: ' + isMainSwiped)
+        }, 200)
+    }  
+}
+
+
+// Swipe events
+document.addEventListener('swiped', function(e) {
+    if (isSwipedLeft == false && isSwipedRight == false && isMainSwiped == false) {
+        // Swipe left when main panel is not swipe
+        document.addEventListener('swiped-left', swipeLeftCenter)
+
+        // Swipe right when main panel is not swipe
+        document.addEventListener('swiped-right', swipeRightCenter)
+
+    } else if (isSwipedLeft == true && isSwipedRight == false && isMainSwiped == true) {
+        document.addEventListener('swiped-right', function(e) {
+            //console.log('swipe right to center')
+            mainPanelElem.classList.remove('main-move-left')
+            mainPanelBgLayer.style.opacity = '0'
+            setTimeout(() => {
+                usersListElem.style.display = 'none'
+                isMainSwiped = false
+                isSwipedLeft = false
+                //console.log('Left: ' + isSwipedLeft + ' || Right: ' + isSwipedRight + ' || Main: ' + isMainSwiped)
+            }, 200)
+        });
+    } else if (isSwipedLeft == false && isSwipedRight == true && isMainSwiped == true) {
+        document.addEventListener('swiped-left', function() {
+            //console.log('swipe left to center')
+            //console.log('SW Left: ' + isSwipedLeft + ' || Right: ' + isSwipedRight + ' || Main: ' + isMainSwiped)
+            mainPanelElem.classList.remove('main-move-right')
+            mainPanelBgLayer.style.opacity = '0'
+            menuElem.style.transform = ''
+            setTimeout(() => {
+                isSwipedRight = false
+                isMainSwiped = false
+                //console.log('SW2 Left: ' + isSwipedLeft + ' || Right: ' + isSwipedRight + ' || Main: ' + isMainSwiped)
+            }, 200)
+        });
+    }
+});
+
+// Back if clicked on main panel
+mainPanelElem.addEventListener('click', () => {
+    if (isSwipedLeft == true && isSwipedRight == false && isMainSwiped == true) {
+        mainPanelElem.classList.remove('main-move-left')
+        mainPanelBgLayer.style.opacity = '0'
+        setTimeout(() => {
+            usersListElem.style.display = 'none'
+            isMainSwiped = false
+            isSwipedLeft = false
+            //console.log('Left: ' + isSwipedLeft + ' || Right: ' + isSwipedRight + ' || Main: ' + isMainSwiped)
+        }, 200)
+    } else if (isSwipedLeft == false && isSwipedRight == true && isMainSwiped == true) {
+        mainPanelElem.classList.remove('main-move-right')
+        mainPanelBgLayer.style.opacity = '0'
+        menuElem.style.transform = ''
+        setTimeout(() => {
+            isSwipedRight = false
+            isMainSwiped = false
+            //console.log('Left: ' + isSwipedLeft + ' || Right: ' + isSwipedRight + ' || Main: ' + isMainSwiped)
+        }, 200)
+    }
+})
+
+// Users list button event
+usersListBtn.addEventListener('click', function(e) {
+    if (isSwipedLeft == false && isSwipedRight == false && isMainSwiped == false) {
+        mainPanelElem.classList.add('main-move-left')
+        mainPanelBgLayer.style.opacity = '1'
+        usersListElem.style.display = 'flex'
+        isSwipedLeft = true
+        setTimeout(() => {
+            isMainSwiped = true
+        }, 200)
+    }
+})
+
+// Menu button event
+menuBtn.addEventListener('click', function(e) {
+    if (isSwipedLeft == false && isSwipedRight == false && isMainSwiped == false) {
+        mainPanelElem.classList.add('main-move-right')
+        mainPanelBgLayer.style.opacity = '1'
+        menuElem.style.transform = 'translateY(-64px)'
+        isSwipedRight = true
+        setTimeout(() => {
+            isMainSwiped = true
+            isSwipedRight = true
+        }, 200)
+    }
+})
+
 const chatForm = document.querySelector('.chat--form')
 const chatContainer = document.querySelector('.chat-messages')
 const chatScrollerContent = document.querySelector('.scroller-content')
@@ -145,7 +281,7 @@ socket.on('activeUsersInfo', (activeUsers) => {
 
     // Context menu for users list
     const userInfoElem = document.querySelectorAll('.active-users-list > .flex')
-    const showUsersListContextMenu = (e) => {
+    const showUsersListContextMenu = (e, elem) => {
         if (document.querySelector('.users-list-context-menu')){
             const usersListContextMenu = document.querySelector('.users-list-context-menu')
             usersListContextMenu.parentNode.removeChild(usersListContextMenu)
@@ -172,6 +308,36 @@ socket.on('activeUsersInfo', (activeUsers) => {
             usersListContextMenu.style.left = pointerX + 'px'
         else
             usersListContextMenu.style.left = pointerX - menuWidth + 'px'
+
+        const sendPrivMsgBtn = document.querySelector('.send-msg');
+        sendPrivMsgBtn.addEventListener('click', () => {
+            console.log("Open priv")
+            // Swipe to center
+            mainPanelElem.classList.remove('main-move-left')
+            mainPanelBgLayer.style.opacity = '0'
+            setTimeout(() => {
+                usersListElem.style.display = 'none'
+                isMainSwiped = false
+                isSwipedLeft = false
+            }, 200)
+
+            // Set channel type icon to @
+            const svgElem = document.querySelector('.channel-type-icon')
+            svgElem.remove
+
+            let svgContainer = document.querySelector('.channel-type')
+            svgContainer.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="channel-type-icon h-6 w-6" viewBox="0 0 20 20" fill="#babbc0">
+                    <path fill-rule="evenodd" d="M14.243 5.757a6 6 0 10-.986 9.284 1 1 0 111.087 1.678A8 8 0 1118 10a3 3 0 01-4.8 2.401A4 4 0 1114 10a1 1 0 102 0c0-1.537-.586-3.07-1.757-4.243zM12 10a2 2 0 10-4 0 2 2 0 004 0z" clip-rule="evenodd" />
+                </svg>`
+
+            // Change channel name
+            const channelName = document.querySelector('.channel-name')
+            let user = elem.querySelector('span').textContent
+            channelName.textContent = user
+
+            socket.emit('openPrivateRoom', user)
+        })
     }
 
     userInfoElem.forEach(elem => {
@@ -180,7 +346,7 @@ socket.on('activeUsersInfo', (activeUsers) => {
         })
         
         elem.addEventListener('contextmenu', (e) => {
-            showUsersListContextMenu(e)
+            showUsersListContextMenu(e, elem)
         })
     })
 
@@ -242,7 +408,7 @@ const printUserFirstMessage = (message, messageId, username, avatar, hour, minut
     const div = document.createElement('div')
 
     div.dataset.id = messageId
-    div.classList.add('flex', 'row', 'p-1', 'mb-4', 'hover:bg-dark-gray')
+    div.classList.add('flex', 'row', 'p-1', 'mb-4', 'last:mb-0', 'hover:bg-dark-gray')
     div.innerHTML = `<div class="mr-4">
         <img src="${avatar}" class="h-12 w-12 rounded-full">
     </div>

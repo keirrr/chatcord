@@ -18,14 +18,14 @@
                 </button>
 
                 <%# Channel type %>
-                <div class="mr-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="#babbc0">
+                <div class="channel-type mr-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="channel-type-icon h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="#babbc0">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
                     </svg>
                 </div>
 
                 <%# Channel name %>
-                <p class="text-xl font-bold">główny</p>
+                <p class="channel-name text-xl font-bold">główny</p>
             </div>
 
             <%# Users list %>
@@ -101,7 +101,13 @@
         <%# Private rooms %>
         <div>
             <ul>
-                <li><button class="h-12 w-12 bg-button rounded-full mb-2"></button></li>
+                <li>
+                    <button class="private-rooms-btn h-12 w-12 bg-dark-gray mb-2 flex justify-center items-center transition-all hover:bg-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="private-chat-icon h-6 w-6 transition-colors" viewBox="0 0 562.07 547.13" fill="#4F555C">
+                            <path class="cls-1" d="M511.49,446H50.57C22.64,446,0,419.27,0,386.33V59.64C0,26.7,22.64,0,50.57,0H511.49c27.94,0,50.58,26.7,50.58,59.64V386.33C562.07,419.27,539.43,446,511.49,446Z"/><path class="cls-1" d="M144.4,541.18l88.93-103.25H112.64v96.22C112.64,547.06,135.06,552,144.4,541.18Z"/>
+                        </svg>
+                    </button>
+                </li>
             </ul>
             <div class="w-3/4 h-0.5 bg-light-dark-gray mb-2 rounded-full mx-auto"></div>
         </div>
@@ -127,6 +133,6 @@
     <script src='/socket.io/socket.io.js'></script>
     <script src='js/script.js'></script>
     <script src='js/swiped-events.min.js'></script>
-    <script src='js/home.js'></script>
+    <!-- <script src='js/home.js'></script> -->
 </body>
 </html>

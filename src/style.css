@@ -68,6 +68,19 @@ option:hover, .active{
     pointer-events: none;
 }
 
+.private-rooms-btn {
+    border-radius: 999px;
+    transition: all ease-in-out .2s;
+}
+
+.private-rooms-btn:hover {
+    border-radius: 15px;
+}
+
+.private-chat-icon:hover{
+    fill: white;
+}
+
 .curr-room {
     border-radius: 15px !important;
 }
