@@ -6,7 +6,7 @@ ChatCord is chat app created with Node.js, Socket.IO, MongoDB and Tailwind CSS. 
 * [Technologies](#technologies)
 
 ## Usage
-You can run demo of this app via this link: https://chatcordbs.herokuapp.com/login
+You can run demo of this app via this link: https://chatcordbs.herokuapp.com/
 
 Application requires registration but it doesn't require email verification so you can use imaginary email.
 
