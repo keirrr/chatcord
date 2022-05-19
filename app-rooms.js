@@ -80,6 +80,7 @@ io.on('connection', (socket) => {
 
     let username = ''
     let usernameAvatarUrl = ''
+    let connRoomName = ''
 
     const userExist = setInterval(() => {
         //console.log(global.activeUsers)
@@ -93,6 +94,11 @@ io.on('connection', (socket) => {
                 userInfo.push(socket.id)
             else
                 userInfo[2] = socket.id
+
+            // Join to main room
+            socket.join('glowny')
+            connRoomName = 'glowny'
+            io.emit('changeRoom', connRoomName)
 
             // Active users list info
             io.emit('activeUsersInfo', global.activeUsers)
@@ -114,7 +120,7 @@ io.on('connection', (socket) => {
         }, 1000)
     }, 200)
 
-    const sendMessage = (path, msgDetails) => {
+    const sendMessage = (path, msgDetails, isPrivate, receivingUserId) => {
         var format = function (code, name) {
             return '<span class="emoji text-xl">' + code + '</span>';
         };
@@ -140,8 +146,15 @@ io.on('connection', (socket) => {
             avk,
             timestamp
         }
+
+        console.log("room: " + connRoomName)
         
-        io.emit('message', (msgDetails2))
+        if (!isPrivate)
+            io.emit('message', (msgDetails2, connRoomName))
+        else {
+            io.to(receivingUserId).emit('message', (msgDetails2, connRoomName))
+            io.to(socket.id).emit('message', (msgDetails2, connRoomName))
+        }
 
         // Push new message to JSON
         messages.messages.push(msgDetails2)

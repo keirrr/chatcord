@@ -140,6 +140,9 @@ const chatScrollerContent = document.querySelector('.scroller-content')
 
 const socket = io({transports: ['websocket'], upgrade: false});
 
+let isClientPrivate = false;
+let connClientRoomName = '';
+
 // Disable context menu
 document.addEventListener('contextmenu', event => event.preventDefault());
 
@@ -156,15 +159,10 @@ socket.on('updateUserAvatar', (userAvatarUrl) => {
 
 let prevMessageAuthor = ''
 // Message from server
-socket.on('message', (msgDetails) => {
+socket.on('message', (msgDetails, connRoomName) => {
     //console.log(msgDetails)
-    outputMessage(msgDetails.msg, msgDetails.msgId, msgDetails.usr, msgDetails.avk)
-})
-
-// Private message
-socket.on('privateMessage', (msgDetails) => {
-    console.log("PRIV")
-    console.log(msgDetails)
+    console.log(connRoomName)
+    outputMessage(msgDetails.msg, msgDetails.msgId, msgDetails.usr, msgDetails.avk, connRoomName)
 })
 
 
@@ -209,7 +207,11 @@ const messagesLoader = () => {
 
     chatScrollerContent.appendChild(msgLoaderDiv)
 }
-messagesLoader()
+
+socket.on('updateMessages', () => {
+    chatScrollerContent.textContent = ''
+    messagesLoader()
+})
 
 socket.on('updateMessages', async (messages) => {
     let prevMessageAuthor = '';
@@ -311,7 +313,6 @@ socket.on('activeUsersInfo', (activeUsers) => {
 
         const sendPrivMsgBtn = document.querySelector('.send-msg');
         sendPrivMsgBtn.addEventListener('click', () => {
-            console.log("Open priv")
             // Swipe to center
             mainPanelElem.classList.remove('main-move-left')
             mainPanelBgLayer.style.opacity = '0'
@@ -337,6 +338,7 @@ socket.on('activeUsersInfo', (activeUsers) => {
             channelName.textContent = user
 
             socket.emit('openPrivateRoom', user)
+            isClientPrivate = true
         })
     }
 
@@ -373,9 +375,10 @@ chatForm.addEventListener('submit', (e) => {
         usr
     }
 
+    console.log("XDDD");
+
     // Emit message to server
     socket.emit('chatMessage', msgDetails)
-    socket.emit('privateMessage', msgDetails)
   
     // Clear input
     e.target.elements.msg.value = ''
@@ -384,24 +387,24 @@ chatForm.addEventListener('submit', (e) => {
 
 // Output message to DOM
 function outputMessage(message, messageId, username, avatar) {
-    let date = new Date();
-    let hour = date.getHours()
-    let minute = date.getMinutes()
+        let date = new Date();
+        let hour = date.getHours()
+        let minute = date.getMinutes()
 
-    if (minute < 10) {
-        minute = '0' + minute
-    }
+        if (minute < 10) {
+            minute = '0' + minute
+        }
 
 
-    if (prevMessageAuthor == username) {
-        printUserNextMessage(message, messageId)
-    } else {
-        printUserFirstMessage(message, messageId, username, avatar, hour, minute)
-    }
+        if (prevMessageAuthor == username) {
+            printUserNextMessage(message, messageId)
+        } else {
+            printUserFirstMessage(message, messageId, username, avatar, hour, minute)
+        }
 
-    chatContainer.scrollTop = chatContainer.scrollHeight
+        chatContainer.scrollTop = chatContainer.scrollHeight
 
-    prevMessageAuthor = username;
+        prevMessageAuthor = username
 }
 
 const printUserFirstMessage = (message, messageId, username, avatar, hour, minute) => {
